@@ -1,0 +1,53 @@
+
+Percolation Problem Notes
+
+
+grid will be an array with site from 0 - N-1
+
+ex. N = 4
+    *
+0  1  2  3 
+0  1  2  3
+0  1  2  3
+0  1  2  3
+    *
+
+there will be a virtual site on either end -- if they connect, system percolates
+
+How to check whether an N-by-N system percolates?
+・Create an object for each site and name them 0 to N 2 – 1.
+・Sites are in same component if connected by open sites.
+・Percolates iff any site on bottom row is connected to site on top row
+	Clever trick: Introduce 2 virtual sites (and connections to top and bottom).
+	Percolates iff virtual top site is connected to virtual bottom site.
+
+_____________
+types of sites;
+- blocked site (not open, not full)
+- empty open site
+- full open site 
+
+1. site is opened
+2. check if any surrounding sites (top, bottom, l, r) are open && full
+    - connect the site to the component
+4. if the site is on the bottom row 
+    - percolates
+5. else, 
+    - does not percolate
+
+to open a new site, connect newly opened site to all of its adjacent open squares
+
+up to 4 calls to union
+- It is called for each neighboring site that is already open. There are 4 possible neighbors, but some of them may not already be open.
+
+_____________
+
+dynamic connectivity problem
+        
+- union command: connects two objects
+- find/connected query: is there a path b/w objects
+- connected components (equivalence class): set of objected that are mutually connected
+
+- ideal algorithm to solve dc problem: weighted quick union + path compression
+- WQU: make the root of the smaller tree (in terms of the number of nodes) point to the root of the larger tree.
+- PC: each node of the smaller tree being merged will now point to the root of the larger tree
