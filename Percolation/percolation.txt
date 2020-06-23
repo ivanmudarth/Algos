@@ -7,9 +7,9 @@ grid will be an array with site from 0 - N-1
 ex. N = 4
     *
 0  1  2  3 
-0  1  2  3
-0  1  2  3
-0  1  2  3
+4  5  6  7 
+8  9  10 11
+12 13 14 15 
     *
 
 there will be a virtual site on either end -- if they connect, system percolates
@@ -27,16 +27,6 @@ types of sites;
 - empty open site
 - full open site 
 
-1. site is opened
-2. check if any surrounding sites (top, bottom, l, r) are open && full
-    - connect the site to the component
-4. if the site is on the bottom row 
-    - percolates
-5. else, 
-    - does not percolate
-
-to open a new site, connect newly opened site to all of its adjacent open squares
-
 up to 4 calls to union
 - It is called for each neighboring site that is already open. There are 4 possible neighbors, but some of them may not already be open.
 
@@ -51,3 +41,4 @@ dynamic connectivity problem
 - ideal algorithm to solve dc problem: weighted quick union + path compression
 - WQU: make the root of the smaller tree (in terms of the number of nodes) point to the root of the larger tree.
 - PC: each node of the smaller tree being merged will now point to the root of the larger tree
+

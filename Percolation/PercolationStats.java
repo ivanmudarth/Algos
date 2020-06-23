@@ -1,3 +1,5 @@
+package Percolation;
+
 public class PercolationStats {
 
     // perform independent trials on an n-by-n grid
@@ -18,6 +20,7 @@ public class PercolationStats {
     // test client (see below)
     public static void main(String[] args) {
         // check project site for more info
+        System.out.println("Hello world");
     }
 
 }
