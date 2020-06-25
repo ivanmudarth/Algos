@@ -14,6 +14,8 @@ public class Percolation {
     private int N;
     private int counter = 0;
     private static WeightedQuickUnionUF qu;
+    private int source;
+    private int sink;
 
     // creates n-by-n grid, with all sites initially blocked
     public Percolation(int n) {
@@ -37,17 +39,19 @@ public class Percolation {
     }
 
     // converts row, col values to an int representing a site on UF data structure
-    public int encode(int i, int j) {
-        return (N * i) + j + 1;
+    private int encode(int i, int j) {
+        return (N * i + j + 1);
     }
 
     // opens the site (row, col) if it is not open already
     public void open(int row, int col) {
-        if (status[row][col] == false) {
+        if (row < 0 || row > N - 1 || col < 0 || col > N - 1) {
+            throw new IndexOutOfBoundsException();
+        }
+        if (!isOpen(row, col)) {
             status[row][col] = true;
             counter++;
             // call union to all neighbouring sites
-
             if (status[row - 1][col] == true) // check site above
                 qu.union(encode(row, col), encode((row - 1), col));
             if (status[row + 1][col] == true) // check site below
@@ -61,11 +65,17 @@ public class Percolation {
 
     // is the site (row, col) open?
     public boolean isOpen(int row, int col) {
+        if (row < 0 || row > N - 1 || col < 0 || col > N - 1) {
+            throw new IndexOutOfBoundsException();
+        }
         return status[row][col];
     }
 
     // is the site (row, col) full?
     public boolean isFull(int row, int col) {
+        if (row < 0 || row > N - 1 || col < 0 || col > N - 1) {
+            throw new IndexOutOfBoundsException();
+        }
         return qu.find(encode(row, col)) == qu.find(0);
     }
 
@@ -95,6 +105,11 @@ public class Percolation {
         }
         // test output
         System.out.println("Number of open sites: " + grid.numberOfOpenSites());
+        if (grid.percolates()) {
+            System.out.println("system percolates");
+        } else {
+            System.out.println("system does not percolate");
+        }
         System.out.println("Site vacancy probability (p): " + p); // value should be around 0.593
     }
 }
