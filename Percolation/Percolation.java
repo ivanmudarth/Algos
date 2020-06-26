@@ -1,12 +1,10 @@
 package Percolation;
 
 import edu.princeton.cs.algs4.StdRandom;
-import edu.princeton.cs.algs4.StdIn;
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 public class Percolation {
     // avoid back wash problem
-    // simplify initialization of id and status arrays
     // run tests
     private boolean[][] status;
     private int N;
@@ -38,11 +36,16 @@ public class Percolation {
         return (N * i + j + 1);
     }
 
-    // opens the site (row, col) if it is not open already
-    public void open(int row, int col) {
+    private void indexValidate(int row, int col) {
         if (row < 0 || row > N - 1 || col < 0 || col > N - 1) {
             throw new IndexOutOfBoundsException();
         }
+    }
+
+    // opens the site (row, col) if it is not open already
+    public void open(int row, int col) {
+        indexValidate(row, col);
+
         if (!isOpen(row, col)) {
             status[row][col] = true;
             counter++;
@@ -60,9 +63,8 @@ public class Percolation {
 
     // is the site (row, col) open?
     public boolean isOpen(int row, int col) {
-        if (row < 0 || row > N - 1 || col < 0 || col > N - 1) {
-            throw new IndexOutOfBoundsException();
-        }
+        indexValidate(row, col);
+
         if (status[row][col]) {
             return true;
         }
@@ -71,9 +73,8 @@ public class Percolation {
 
     // is the site (row, col) full?
     public boolean isFull(int row, int col) {
-        if (row < 0 || row > N - 1 || col < 0 || col > N - 1) {
-            throw new IndexOutOfBoundsException();
-        }
+        indexValidate(row, col);
+
         if (status[row][col] && qu.find(encode(row, col)) == qu.find(0)) {
             return true;
         }
@@ -92,9 +93,9 @@ public class Percolation {
 
     // test client
     public static void main(String[] args) {
-        int N = StdIn.readInt(); // Read number of sites.
+        int N = Integer.parseInt(args[0]); // Read number of sites.
         Percolation grid = new Percolation(N); // Initialize N components.
-        double p = grid.numberOfOpenSites() / (grid.N ^ 2);
+        double p = grid.numberOfOpenSites() / (grid.N * grid.N);
         int row = 0;
         int col = 0;
 
@@ -105,12 +106,12 @@ public class Percolation {
             System.out.println("Site opened at " + row + ", " + col);
         }
         // test output
-        System.out.println("Number of open sites: " + grid.numberOfOpenSites());
+        System.out.println("number of open sites: " + grid.numberOfOpenSites());
         if (grid.percolates()) {
             System.out.println("system percolates");
         } else {
             System.out.println("system does not percolate");
         }
-        System.out.println("Site vacancy probability (p): " + p); // value should be around 0.593
+        System.out.println("site vacancy probability (p): " + p); // value should be around 0.593
     }
 }
