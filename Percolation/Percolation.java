@@ -6,38 +6,34 @@ import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 public class Percolation {
     // avoid back wash problem
     // run tests
+    private final WeightedQuickUnionUF qu;
     private boolean[][] status;
-    private int N;
+    private final int n;
     private int counter = 0;
-    private static WeightedQuickUnionUF qu;
-    private int source;
-    private int sink;
 
     // creates n-by-n grid, with all sites initially blocked
-    public Percolation(int n) {
-        N = n;
-        status = new boolean[N][N];
-        qu = new WeightedQuickUnionUF(N * N + 2);
-        sink = N * N + 1;
-        source = 0;
+    public Percolation(int a) {
+        n = a;
+        status = new boolean[n][n];
+        qu = new WeightedQuickUnionUF(n * n + 2);
 
-        if (N <= 0) {
+        if (n <= 0) {
             throw new IllegalArgumentException();
         }
-        for (int r = 0; r < N; r++) {
+        for (int r = 0; r < n; r++) {
             // initialize source and sink (virtual) sites
-            qu.union(encode(0, r), source);
-            qu.union(encode(N - 1, r), sink);
+            qu.union(encode(0, r), 0); // source
+            qu.union(encode(n - 1, r), (n * n + 1)); // sink
         }
     }
 
     // converts row, col values to an int representing a site on UF data structure
     private int encode(int i, int j) {
-        return (N * i + j + 1);
+        return (n * i + j + 1);
     }
 
     private void indexValidate(int row, int col) {
-        if (row < 0 || row > N - 1 || col < 0 || col > N - 1) {
+        if (row < 0 || row > n - 1 || col < 0 || col > n - 1) {
             throw new IndexOutOfBoundsException();
         }
     }
@@ -50,14 +46,14 @@ public class Percolation {
             status[row][col] = true;
             counter++;
             // call union to all neighbouring sites
-            if (row - 1 >= 0 && status[row - 1][col] == true) // check site above
+            if (row - 1 >= 0 && status[row - 1][col]) // check site above
                 qu.union(encode(row, col), encode((row - 1), col));
-            if (row + 1 < N && status[row + 1][col] == true) // check site below
+            if (row + 1 < this.n && status[row + 1][col]) // check site below
                 qu.union(encode(row, col), encode((row + 1), col));
-            if (col + 1 < N && status[row][col + 1] == true) // check site to the right
-                qu.union(encode(row, col), encode(row, (col + 1)));
-            if (col - 1 >= 0 && status[row][col - 1] == true) // check site to the left
+            if (col - 1 >= 0 && status[row][col - 1]) // check site to the left
                 qu.union(encode(row, col), encode(row, col - 1));
+            if (col + 1 < this.n && status[row][col + 1]) // check site to the right
+                qu.union(encode(row, col), encode(row, (col + 1)));
         }
     }
 
@@ -88,20 +84,20 @@ public class Percolation {
 
     // does the system percolate?
     public boolean percolates() {
-        return isFull(N - 1, N); // checks if sink is a full site
+        return isFull(n - 1, n); // checks if sink is a full site
     }
 
     // test client
     public static void main(String[] args) {
-        int N = Integer.parseInt(args[0]); // Read number of sites.
-        Percolation grid = new Percolation(N); // Initialize N components.
-        double p = grid.numberOfOpenSites() / (grid.N * grid.N);
+        final int n = Integer.parseInt(args[0]); // Read number of sites.
+        Percolation grid = new Percolation(n); // Initialize N components.
+        double p = grid.numberOfOpenSites() / (double) (n * n);
         int row = 0;
         int col = 0;
 
         while (!grid.percolates()) {
-            row = StdRandom.uniform(grid.N - 1);
-            col = StdRandom.uniform(grid.N - 1);
+            row = StdRandom.uniform(n);
+            col = StdRandom.uniform(n);
             grid.open(row, col);
             System.out.println("Site opened at " + row + ", " + col);
         }
