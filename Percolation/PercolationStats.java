@@ -15,7 +15,7 @@ public class PercolationStats {
         int row = 0;
         int col = 0;
         Percolation grid;
-        double p;
+        double openSites;
 
         if (n <= 0 || t <= 0) {
             throw new IllegalArgumentException();
@@ -23,13 +23,16 @@ public class PercolationStats {
         // run experiment t times
         for (int i = 0; i < t; i++) {
             grid = new Percolation(n); // Initialize N components.
+            openSites = 0;
             while (!grid.percolates()) {
                 row = StdRandom.uniform(1, n);
                 col = StdRandom.uniform(1, n);
-                grid.open(row, col);
+                if (!grid.isOpen(row, col)) {
+                    grid.open(row, col);
+                    openSites++;
+                }
             }
-            p = grid.numberOfOpenSites() / (double) (n * n); // percolation threshold
-            a[i] = p;
+            a[i] = openSites / (double) (n * n); // percolation threshold
         }
     }
 
