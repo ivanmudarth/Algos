@@ -24,8 +24,8 @@ public class PercolationStats {
         for (int i = 0; i < t; i++) {
             grid = new Percolation(n); // Initialize N components.
             while (!grid.percolates()) {
-                row = StdRandom.uniform(n);
-                col = StdRandom.uniform(n);
+                row = StdRandom.uniform(1, n);
+                col = StdRandom.uniform(1, n);
                 grid.open(row, col);
             }
             p = grid.numberOfOpenSites() / (double) (n * n); // percolation threshold

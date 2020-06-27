@@ -8,33 +8,33 @@ public class Percolation {
     // run tests
     private final WeightedQuickUnionUF qu;
     private boolean[][] status;
-    private final int n;
+    private final int n; // 1 - n
     private int counter = 0;
 
     // creates n-by-n grid, with all sites initially blocked
     public Percolation(int a) {
         n = a;
-        status = new boolean[n][n];
-        qu = new WeightedQuickUnionUF(n * n + 2);
-
         if (n <= 0) {
             throw new IllegalArgumentException();
         }
-        for (int r = 0; r < n; r++) {
+        status = new boolean[n + 1][n + 1];
+        qu = new WeightedQuickUnionUF(n * n + 2);
+
+        for (int r = 1; r <= n; r++) {
             // initialize source and sink (virtual) sites
-            qu.union(encode(0, r), 0); // source
-            qu.union(encode(n - 1, r), (n * n + 1)); // sink
+            qu.union(encode(1, r), 0); // source
+            qu.union(encode(n, r), (n * n + 1)); // sink
         }
     }
 
     // converts row, col values to an int representing a site on UF data structure
-    private int encode(int i, int j) {
-        return (n * i + j + 1);
+    private int encode(int row, int col) {
+        return (n * (row - 1) + col);
     }
 
     private void indexValidate(int row, int col) {
-        if (row < 0 || row > n - 1 || col < 0 || col > n - 1) {
-            throw new IndexOutOfBoundsException();
+        if (row < 1 || row > n || col < 1 || col > n) {
+            throw new IllegalArgumentException();
         }
     }
 
@@ -46,13 +46,13 @@ public class Percolation {
             status[row][col] = true;
             counter++;
             // call union to all neighbouring sites
-            if (row - 1 >= 0 && status[row - 1][col]) // check site above
+            if (row - 1 > 0 && status[row - 1][col]) // check site above
                 qu.union(encode(row, col), encode((row - 1), col));
-            if (row + 1 < this.n && status[row + 1][col]) // check site below
+            if (row + 1 <= n && status[row + 1][col]) // check site below
                 qu.union(encode(row, col), encode((row + 1), col));
-            if (col - 1 >= 0 && status[row][col - 1]) // check site to the left
+            if (col - 1 > 0 && status[row][col - 1]) // check site to the left
                 qu.union(encode(row, col), encode(row, col - 1));
-            if (col + 1 < this.n && status[row][col + 1]) // check site to the right
+            if (col + 1 <= n && status[row][col + 1]) // check site to the right
                 qu.union(encode(row, col), encode(row, (col + 1)));
         }
     }
@@ -84,7 +84,7 @@ public class Percolation {
 
     // does the system percolate?
     public boolean percolates() {
-        return isFull(n - 1, n); // checks if sink is a full site
+        return (qu.find(n * n + 1) == qu.find(0)); // checks if sink is a full site
     }
 
     // test client
