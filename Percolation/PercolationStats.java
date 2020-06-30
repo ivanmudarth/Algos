@@ -25,8 +25,8 @@ public class PercolationStats {
             grid = new Percolation(n); // Initialize N components.
             openSites = 0;
             while (!grid.percolates()) {
-                row = StdRandom.uniform(1, n);
-                col = StdRandom.uniform(1, n);
+                row = StdRandom.uniform(1, n + 1);
+                col = StdRandom.uniform(1, n + 1);
                 if (!grid.isOpen(row, col)) {
                     grid.open(row, col);
                     openSites++;
@@ -71,5 +71,4 @@ public class PercolationStats {
         System.out.println("stdev = " + p.stddev());
         System.out.println("95% confidence interval = [" + p.confidenceLo() + ", " + p.confidenceHi() + "]");
     }
-
 }
