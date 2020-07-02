@@ -4,7 +4,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 public class Deque<Item> implements Iterable<Item> {
-    private int N; // num of items
+    private int n; // num of items
     private Node first; // top of the stack / first node
     private Node last; // bottom of the stack / last node
 
@@ -31,17 +31,17 @@ public class Deque<Item> implements Iterable<Item> {
     public Deque() {
         first = null;
         last = null;
-        N = 0;
+        n = 0;
     }
 
     // is the deque empty?
     public boolean isEmpty() {
-        return (N == 0);
+        return (n == 0);
     }
 
     // return the number of items on the deque
     public int size() {
-        return N;
+        return n;
     }
 
     // add the item to the front
@@ -57,7 +57,7 @@ public class Deque<Item> implements Iterable<Item> {
         }
         first.next = oldFirst;
         first.item = item;
-        N++;
+        n++;
     }
 
     // add the item to the back
@@ -74,7 +74,7 @@ public class Deque<Item> implements Iterable<Item> {
             oldLast.next = last;
             last.prev = oldLast;
         }
-        N++;
+        n++;
     }
 
     // remove and return the item from the front
@@ -88,7 +88,7 @@ public class Deque<Item> implements Iterable<Item> {
         } else {
             first.prev = null;
         }
-        N--;
+        n--;
         return item;
     }
 
@@ -103,7 +103,7 @@ public class Deque<Item> implements Iterable<Item> {
         } else {
             last.next = null;
         }
-        N--;
+        n--;
         return item;
     }
 
