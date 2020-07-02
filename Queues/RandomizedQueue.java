@@ -1,46 +1,79 @@
 package Queues;
 
 import java.util.Iterator;
-import java.util.ListIterator;
+import java.util.NoSuchElementException;
+
+import edu.princeton.cs.algs4.StdRandom;
 
 public class RandomizedQueue<Item> implements Iterable<Item> {
-    private int N;
-    private Node first;
+    private Item[] a;
+    private int n;
 
-    private class Node {
-        Item item;
-        Node next;
-    }
+    // A randomized queue is similar to a stack or queue, except that the item
+    // removed is chosen uniformly at random among items in the data structure.
 
     // construct an empty randomized queue
     public RandomizedQueue() {
+        n = 0;
+        a = (Item[]) new Object[2]; // generic casting
+    }
+
+    // resize the underlying array holding the elements
+    private void resize(int cap) {
+        Item[] copy = (Item[]) new Object[cap];
+        for (int i = 0; i < n; i++) {
+            copy[i] = a[i];
+        }
+        a = copy;
+    }
+
+    // corner case
+    private void elementNotExist() {
+        if (isEmpty())
+            throw new NoSuchElementException();
     }
 
     // is the randomized queue empty?
     public boolean isEmpty() {
-        return true;
+        return (n == 0);
     }
 
     // return the number of items on the randomized queue
     public int size() {
-        return N;
+        return n;
     }
 
     // add the item
     public void enqueue(Item item) {
+        if (item == null) // corner case
+            throw new IllegalArgumentException();
+
+        if (n == a.length) // resize array if necessary
+            resize(a.length * 2);
+        // item is added to the element on pointer, pointer is incremented
+        a[n++] = item;
     }
 
     // remove and return a random item
     public Item dequeue() {
-        Item item = first.item;
-        return item;
+        int rand = StdRandom.uniform(n);
+        Item i = a[rand];
+        // item from tail replaces item being dequeued
+        a[rand] = a[n - 1];
+        a[--n] = null;
+
+        if (n > 0 && n == a.length / 4) // resize array if necessary
+            resize(a.length / 2);
+        return i;
     }
 
     // return a random item (but do not remove it)
     public Item sample() {
-        Item item = first.item;
-        return item;
+        return a[StdRandom.uniform(n)];
     }
+    // Each iterator must return the items in uniformly random order. The order of
+    // two or more iterators to the same randomized queue must be mutually
+    // independent; each iterator must maintain its own random order.
 
     // return an independent iterator over items in random order
     public Iterator<Item> iterator() {
@@ -48,21 +81,25 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     }
 
     private class ListIterator implements Iterator<Item> {
-        private Node current = first;
+        private int i = n;
 
         public boolean hasNext() {
-            return true;
+            return (i > 0);
+        }
+
+        public void remove() {
+            throw new UnsupportedOperationException();
         }
 
         public Item next() {
-            Item item = current.item;
-            current = current.next;
-            return item;
+            if (!hasNext()) // corner case
+                throw new NoSuchElementException();
+            return a[--i];
         }
     }
 
     // unit testing (required)
     public static void main(String[] args) {
-    }
 
+    }
 }
