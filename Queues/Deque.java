@@ -2,6 +2,7 @@ package Queues;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import edu.princeton.cs.algs4.StdOut;
 
 public class Deque<Item> implements Iterable<Item> {
     private int n; // num of items
@@ -14,15 +15,6 @@ public class Deque<Item> implements Iterable<Item> {
         Node prev;
     }
 
-    private void illegalArg(Item item) {
-        if (item == null)
-            throw new IllegalArgumentException();
-    }
-
-    private void elementNotExist() {
-        if (isEmpty())
-            throw new NoSuchElementException();
-    }
     // Deque (A double-ended queue): is a generalization of a
     // stack and a queue that supports adding and removing items from either the
     // front or the back of the data structure
@@ -32,6 +24,18 @@ public class Deque<Item> implements Iterable<Item> {
         first = null;
         last = null;
         n = 0;
+    }
+
+    // corner case
+    private void illegalArg(Item item) {
+        if (item == null)
+            throw new IllegalArgumentException();
+    }
+
+    // corner case
+    private void elementNotExist() {
+        if (isEmpty())
+            throw new NoSuchElementException();
     }
 
     // is the deque empty?
@@ -135,5 +139,35 @@ public class Deque<Item> implements Iterable<Item> {
 
     // unit testing (required)
     public static void main(String[] args) {
+        int n = 5;
+        Deque<Integer> queue = new Deque<Integer>();
+
+        StdOut.println("test 1 - add to deque:");
+        for (int i = 0; i < n; i++) { // add to front and back of deque
+            queue.addFirst(n);
+            queue.addLast(n);
+        }
+        for (int a : queue) {
+            StdOut.println(a + " "); // expected output: 4 3 2 1 0 0 1 2 3 4
+        }
+        StdOut.println("size: " + queue.size()); // expected value: 10
+        StdOut.println();
+
+        StdOut.println("test 2 - empty deque then add to it:");
+        for (int k = 0; k < n; k++) { // empty deque
+            queue.removeFirst();
+            queue.removeLast();
+        }
+        for (int a : queue) {
+            StdOut.println(a + " "); // expected output: null
+        }
+        if (queue.isEmpty()) {
+            StdOut.println("deque empty, size: " + queue.size()); // expected value: 0
+            queue.addFirst(5);
+            for (int a : queue) {
+                StdOut.println(a + " "); // expected output: 5
+            }
+            StdOut.println("deque not empty, size: " + queue.size()); // expected value: 1
+        }
     }
 }
