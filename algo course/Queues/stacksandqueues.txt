@@ -1,0 +1,34 @@
+stack 
+- examine the item most recently added - LIFO (last in first out)
+    - push - add item to the stack
+    - pop - remove the most recently added item
+
+queue - examine the item most recently added - FIFO (first in first out)
+    - enqueue - add item to the end of the queue
+    - dequeue - remove item from the beginning of the queues
+
+
+___________________
+
+sorting:
+
+selection sort - scan from left to right, find min, exchange pointer with min, repeat from pointer +1
+    - n^2 / 2
+    - always quadratic, doesnt matter if data is already sorted or not
+
+insertion sort - scan from left to right, compare pointer with item to the left, keep exchanging if greater
+    - n^2 / 4
+    - depends on the data being sorted
+    - linear in partially sorted arrays
+
+shellsort - h-sort an array for decreasing values of h (e.g. 7-sort, 3-sort, 1-sort
+    - speed model unknown
+
+shuffle sort - sort array in random order
+    - A: assign a random value to each item, sort each item according to this value
+    - B: scan from left to right, generate a random int b/w 0 and i, swap a[i] and a[r]
+
+convex hull - smallest polygon that encloses a set of points
+    - fact 1: starting with p (vertex with smallest y-value), you can traverse the convex hull only with left turns
+    - fact 2: the vertices of the convex hull appear in increasing order of polar angle with respect to p 
+    - graham scan - choose p, sort points by polar angle with p, consider points in order (discard unless it creates a ccw turn)

@@ -1,8 +1,0 @@
-stack 
-- examine the item most recently added - LIFO (last in first out)
-    - push - add item to the stack
-    - pop - remove the most recently added item
-
-queue - examine the item most recently added - FIFO (first in first out)
-    - enqueue - add item to the end of the queue
-    - dequeue - remove item from the beginning of the queues
