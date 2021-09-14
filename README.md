@@ -1,2 +1,3 @@
-# algorithms-practice
-algorithms practice
+# Algos
+
+algorithm and data structure practice.
